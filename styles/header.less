@@ -1,0 +1,44 @@
+@header-height: 70px;
+
+#header {
+  transition: opacity 0.5s;
+  background: #fff;
+  height: @header-height;
+  // margin-bottom: 24px;
+  // padding: 0 28px;
+  position: relative;
+  z-index: 10;
+  max-width: 100%;
+  border-left: solid 5px @primary-color;
+  border-bottom: solid 1px #e8e8e8;
+
+  &.home-nav-bottom {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom-color: #ebedee;
+    .search {
+      border-left-color: #ebedee;
+    }
+    a {
+      color: @text-color;
+    }
+  }
+}
+
+#logo {
+  overflow: hidden;
+  padding-left: 60px;
+  float: left;
+  height: @header-height;
+  line-height: 66px; // antes era @header-height
+  text-decoration: none;
+  white-space: nowrap;
+  img {
+    height: 55px; /* elias 55px */
+    margin-right: 16px;
+  }
+  img + img {
+    height: 16px;
+    position: relative;
+    top: 1px;
+  }
+}

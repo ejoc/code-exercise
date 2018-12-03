@@ -1,9 +1,49 @@
 /* eslint-disable */
-const withCss = require('@zeit/next-css')
+const withLess = require('@zeit/next-less')
+const lessToJS = require('less-vars-to-js')
+const fs = require('fs')
+const path = require('path')
 
-// fix: prevents error when .css files are required by node
-if (typeof require !== 'undefined') {
-  require.extensions['.css'] = (file) => {}
+// Where your antd-custom.less file lives
+const themeVariables = lessToJS(
+  fs.readFileSync(
+    path.resolve(__dirname, './styles/antd-custom.less'),
+    'utf8'
+  )
+)
+
+class FilterPlugin {
+  constructor(options) {
+    this.options = options;
+  }
+
+  apply(compiler) {
+    compiler.hooks.afterEmit.tap(
+      'FilterPlugin',
+      (compilation) => {
+        compilation.warnings = (compilation.warnings).filter(
+          warning => !this.options.filter.test(warning.message)
+        );
+      }
+    );
+  }
 }
 
-module.exports = withCss()
+// fix: prevents error when .less files are required by node
+if (typeof require !== 'undefined') {
+  require.extensions['.less'] = (file) => {}
+}
+
+module.exports = withLess({
+  lessLoaderOptions: {
+    javascriptEnabled: true,
+    modifyVars: themeVariables,
+  },
+  webpack: config => {
+    config.plugins.push(
+      new FilterPlugin({ filter: /chunk styles \[mini-css-extract-plugin]\nConflicting order between:/ }),
+    );
+
+    return config;
+  },
+})

@@ -1,6 +1,6 @@
 import Layout from '../components/Layout'
 import CongressPeople from '../components/CongressPeople'
-import { changeSession, changeChamber, changeInputSearch, fetchCongressPeople } from '../actions'
+import { fetchCongressPeople } from '../actions/congressPeople'
 
 const Search = (props) => (
   <Layout>
@@ -11,14 +11,22 @@ const Search = (props) => (
 )
 
 Search.getInitialProps = async ({ reduxStore, query }) => {
-  const { session, chamber, searchText } = query
+  const { session, chamber } = query
   const { dispatch } = reduxStore
-  dispatch(changeSession(session))
-  dispatch(changeChamber(chamber))
-  dispatch(changeInputSearch(searchText))
-  await dispatch(fetchCongressPeople())
+  await dispatch(fetchCongressPeople(session, chamber))
 
   return {}
 }
+
+// Search.getInitialProps = async ({ reduxStore, query }) => {
+//   const { session, chamber, searchText } = query
+//   const { dispatch } = reduxStore
+//   dispatch(changeSession(session))
+//   dispatch(changeChamber(chamber))
+//   dispatch(changeInputSearch(searchText))
+//   await dispatch(fetchCongressPeople())
+
+//   return {}
+// }
 
 export default Search

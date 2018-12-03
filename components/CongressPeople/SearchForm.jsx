@@ -2,23 +2,25 @@ import React from 'react'
 import Router from 'next/router'
 import { Form, Input, Select, InputNumber, Button } from 'antd'
 
+import { initialSession, initialChamber } from '../../reducers/congressPeople'
+
 const { Option } = Select
 // const { Search } = Input
 
 const FormItem = Form.Item
 
-// export const initialChamber = 'senate'
-// export const initialSession = 115
-
 class SearchForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault()
-    const { form } = this.props
+    const { form, query } = this.props
     form.validateFields((err, values) => {
       if (!err) {
         Router.push({
           pathname: '/search',
-          query: values,
+          query: {
+            ...query,
+            ...values,
+          },
         })
       }
     })
@@ -27,21 +29,17 @@ class SearchForm extends React.Component {
   render() {
     const {
       form: { getFieldDecorator },
-      searchText,
       session,
       chamber,
+      searchText,
     } = this.props
     return (
       <Form layout="inline" onSubmit={this.handleSubmit}>
         <FormItem label="Chamber">
           {getFieldDecorator('chamber', {
-            initialValue: chamber,
+            initialValue: chamber || initialChamber,
           })(
-            <Select
-              // value={props.chamber}
-              // onChange={value => props.onChamberChange(value)}
-              style={{ width: 120 }}
-            >
+            <Select style={{ width: 120 }}>
               <Option value="senate">Senate</Option>
               <Option value="house">House</Option>
             </Select>
@@ -49,13 +47,8 @@ class SearchForm extends React.Component {
         </FormItem>
         <FormItem label="Session">
           {getFieldDecorator('session', {
-            initialValue: session,
-          })(
-            <InputNumber
-            // value={props.session}
-            // onChange={props.onSessionChange}
-            />
-          )}
+            initialValue: session || initialSession,
+          })(<InputNumber />)}
         </FormItem>
         <FormItem>
           {getFieldDecorator('searchText', {
@@ -63,13 +56,7 @@ class SearchForm extends React.Component {
             // rules: [
             //   { required: true, message: 'Please input your search text!' },
             // ],
-          })(
-            <Input
-              // value={props.searchText}
-              // onChange={props.onSearchChange}
-              placeholder="Search input"
-            />
-          )}
+          })(<Input placeholder="Search input" />)}
         </FormItem>
         <FormItem>
           <Button type="primary" htmlType="submit">

@@ -1,6 +1,6 @@
 import Layout from '../components/Layout'
 import CongressPeople from '../components/CongressPeople'
-import { fetchCongressPeople } from '../actions'
+import { fetchCongressPeople } from '../actions/congressPeople'
 
 // const apiFilters = [
 //   'party',
@@ -17,13 +17,8 @@ const CongressPage =  (props) => (
 )
 
 CongressPage.getInitialProps = async ({ reduxStore }) => {
-  // const { session, chamber, searchText } = query
   const { dispatch } = reduxStore
-  // dispatch(changeSession(session))
-  // dispatch(changeChamber(chamber))
-  // dispatch(changeInputSearch(searchText))
   await dispatch(fetchCongressPeople())
-
   return {}
 }
 

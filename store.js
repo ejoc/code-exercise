@@ -1,10 +1,10 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 // import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 import logger from 'redux-logger'
-import reducer, { initialState as congressInitialState } from './reducer'
+import reducers, { initialStates } from './reducers'
 
-export function initializeStore (initialState = congressInitialState) {
-  // return createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)))
+export default (initialState = initialStates) => {
+  const reducer = combineReducers(reducers)
   return createStore(reducer, initialState, applyMiddleware(thunkMiddleware, logger))
 }

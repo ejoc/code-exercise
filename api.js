@@ -8,7 +8,17 @@ const fetch = axios.create({
   headers: {'X-API-Key': 'd0ywBucVrXRlMQhENZxRtL3O7NPgtou2mwnLARTr'}
 });
 
-export async function getCongressPeople(session, chamber) {
+async function getCongressPeople(session, chamber) {
   const { data } = await fetch(`congress/v1/${session}/${chamber}/members.json`)
   return data.results[0].members
+}
+
+async function getCongressPerson(id) {
+  const { data } = await fetch(`congress/v1/members/${id}.json`)
+  return data.results[0]
+}
+
+export default {
+  getCongressPeople,
+  getCongressPerson,
 }
