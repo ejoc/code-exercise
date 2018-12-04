@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Table, Icon, Divider } from 'antd'
+import { Table, Icon, Divider, Pagination } from 'antd'
 
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
@@ -69,13 +69,71 @@ const columns = [
   },
 ]
 
-const CongressPeopleList = ({ congressPeople, loading }) => (
-  <Table
-    dataSource={congressPeople}
-    columns={columns}
-    rowKey="id"
-    loading={loading}
-  />
-)
+class CongressPeopleList extends React.Component {
+  state = {
+    current: 1,
+    perPage: 20,
+  }
+
+  onPaginationChange = page => {
+    this.setState({
+      current: page,
+    })
+  }
+
+  onShowSizeChange = (current, perPage) => {
+    this.setState({
+      current,
+      perPage,
+    })
+  }
+
+  render() {
+    const { congressPeople, loading } = this.props
+    const { current, perPage } = this.state
+
+    const indexOfLast = current * perPage
+    const indexOfFirst = indexOfLast - perPage
+    const displayList = congressPeople.slice(indexOfFirst, indexOfLast)
+
+    return (
+      <div>
+        <Table
+          dataSource={displayList}
+          columns={columns}
+          rowKey="id"
+          loading={loading}
+          pagination={false}
+        />
+        <br />
+        <Pagination
+          showSizeChanger
+          onChange={this.onPaginationChange}
+          onShowSizeChange={this.onShowSizeChange}
+          current={current}
+          pageSize={perPage}
+          total={congressPeople.length}
+        />
+      </div>
+    )
+  }
+}
+
+// const CongressPeopleList = ({ congressPeople, loading }) => (
+//   <div>
+//     <Table
+//       dataSource={congressPeople}
+//       columns={columns}
+//       rowKey="id"
+//       loading={loading}
+//     />
+//     <Pagination
+//       showSizeChanger
+//       onShowSizeChange={onShowSizeChange}
+//       defaultCurrent={3}
+//       total={500}
+//     />
+//   </div>
+// )
 
 export default CongressPeopleList

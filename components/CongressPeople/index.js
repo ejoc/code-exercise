@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Card, Row, Col, Button } from 'antd'
+import { Card, Row, Col } from 'antd'
 
 import CongressPeopleList from './CongressPeopleList'
 import SearchForm from './SearchForm'
@@ -15,14 +15,28 @@ import {
 
 class CongressPeople extends React.Component {
   state = {
-    votesPercentage: [],
-    totalVotes: [],
+    votesPercentage: [0, 100],
+    prevMaxTotalVotes: this.props.maxTotalVotes,
+    totalVotes: [0, this.props.maxTotalVotes || 100],
   }
 
-  // componentDidMount() {
-  //   const { fetchCongressPeople } = this.props
-  //   fetchCongressPeople()
+  // componentDidUpdate(prevProps) {
+  //   // Typical usage (don't forget to compare props):
+  //   const { maxTotalVotes } = this.props
+  //   if (maxTotalVotes !== prevProps.maxTotalVotes) {
+  //     this.setState({ totalVotes: [0, maxTotalVotes || 100] })
+  //   }
   // }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.maxTotalVotes !== state.prevMaxTotalVotes) {
+      return {
+        prevMaxTotalVotes: props.maxTotalVotes,
+        totalVotes: [0, props.maxTotalVotes || 100],
+      };
+    }
+    return null
+  }
 
   handleVotesPercentageChange = value => {
     this.setState({ votesPercentage: value })
@@ -32,16 +46,11 @@ class CongressPeople extends React.Component {
     this.setState({ totalVotes: value })
   }
 
-  handleVotesSliderClear = e => {
-    e.preventDefault()
-    this.setState({ totalVotes: [], votesPercentage: [] })
-  }
-
   render() {
     const { congressPeople, maxTotalVotes, isFetching, query } = this.props
     const { searchText, session, chamber, gender, party, next_election } = query
     const { votesPercentage, totalVotes } = this.state
-    console.log(totalVotes)
+    // console.log(maxTotalVotes, totalVotes)
     let filterCongressPeople
     if (
       votesPercentage.length ||
@@ -91,9 +100,6 @@ class CongressPeople extends React.Component {
               max={maxTotalVotes}
               onChange={this.handleTotalVotesChange}
             />
-            {(totalVotes.length > 1 || votesPercentage.length > 1) && (
-              <Button onClick={this.handleVotesSliderClear}>Clear</Button>
-            )}
           </Card>
         </Col>
         <Col span={19}>

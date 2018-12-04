@@ -8,12 +8,7 @@ function formatter(value) {
 const VotesPercentage = ({ onChange, value }) => (
   <div>
     <span>Votes with party percentage</span>
-    <Slider
-      value={value.length ? value : [0, 0]}
-      range
-      tipFormatter={formatter}
-      onChange={onChange}
-    />
+    <Slider value={value} range tipFormatter={formatter} onChange={onChange} />
   </div>
 )
 
