@@ -89,12 +89,63 @@ class CongressPeopleList extends React.Component {
   }
 
   render() {
-    const { congressPeople, loading } = this.props
+    const {
+      congressPeople,
+      searchText,
+      votesPercentage,
+      totalVotes,
+      gender,
+      party,
+      next_election,
+      loading,
+    } = this.props
     const { current, perPage } = this.state
+
+    let filterCongressPeople
+    if (
+      votesPercentage.length ||
+      (searchText && searchText.length) ||
+      totalVotes.length ||
+      gender ||
+      party ||
+      next_election
+    ) {
+      filterCongressPeople =
+        congressPeople &&
+        congressPeople.filter(c => {
+          const fullName = `${c.first_name} ${c.middle_name} ${c.last_name}`
+          let flag = true
+          if (searchText && searchText.length) {
+            flag = fullName.toLowerCase().indexOf(searchText.toLowerCase()) >= 0
+          }
+          if (flag && gender) {
+            flag = c.gender === gender.toUpperCase()
+          }
+          if (flag && party) {
+            flag = c.party === party.toUpperCase()
+          }
+          if (flag && next_election) {
+            flag = c.next_election === next_election
+          }
+          if (flag && votesPercentage.length) {
+            flag =
+              c.votes_with_party_pct >= votesPercentage[0] &&
+              c.votes_with_party_pct <= votesPercentage[1]
+          }
+          if (flag && totalVotes.length) {
+            flag =
+              c.total_votes >= totalVotes[0] && c.total_votes <= totalVotes[1]
+          }
+          return flag
+        })
+    }
 
     const indexOfLast = current * perPage
     const indexOfFirst = indexOfLast - perPage
-    const displayList = congressPeople.slice(indexOfFirst, indexOfLast)
+    const displayList = (filterCongressPeople || congressPeople || []).slice(
+      indexOfFirst,
+      indexOfLast
+    )
 
     return (
       <div>
@@ -112,28 +163,11 @@ class CongressPeopleList extends React.Component {
           onShowSizeChange={this.onShowSizeChange}
           current={current}
           pageSize={perPage}
-          total={congressPeople.length}
+          total={(filterCongressPeople || congressPeople || []).length}
         />
       </div>
     )
   }
 }
-
-// const CongressPeopleList = ({ congressPeople, loading }) => (
-//   <div>
-//     <Table
-//       dataSource={congressPeople}
-//       columns={columns}
-//       rowKey="id"
-//       loading={loading}
-//     />
-//     <Pagination
-//       showSizeChanger
-//       onShowSizeChange={onShowSizeChange}
-//       defaultCurrent={3}
-//       total={500}
-//     />
-//   </div>
-// )
 
 export default CongressPeopleList

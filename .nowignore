@@ -1,0 +1,7 @@
+node_modules
+.next
+__mocks__
+__test__
+.env
+jest.setup.js
+.eslintrc.js

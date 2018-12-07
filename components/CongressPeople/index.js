@@ -20,14 +20,6 @@ class CongressPeople extends React.Component {
     totalVotes: [0, this.props.maxTotalVotes || 100],
   }
 
-  // componentDidUpdate(prevProps) {
-  //   // Typical usage (don't forget to compare props):
-  //   const { maxTotalVotes } = this.props
-  //   if (maxTotalVotes !== prevProps.maxTotalVotes) {
-  //     this.setState({ totalVotes: [0, maxTotalVotes || 100] })
-  //   }
-  // }
-
   static getDerivedStateFromProps(props, state) {
     if (props.maxTotalVotes !== state.prevMaxTotalVotes) {
       return {
@@ -48,47 +40,9 @@ class CongressPeople extends React.Component {
 
   render() {
     const { congressPeople, maxTotalVotes, isFetching, query } = this.props
-    const { searchText, session, chamber, gender, party, next_election } = query
+    const { session, chamber, searchText, gender, party, next_election } = query
     const { votesPercentage, totalVotes } = this.state
     // console.log(maxTotalVotes, totalVotes)
-    let filterCongressPeople
-    if (
-      votesPercentage.length ||
-      (searchText && searchText.length) ||
-      totalVotes.length ||
-      gender ||
-      party ||
-      next_election
-    ) {
-      filterCongressPeople =
-        congressPeople &&
-        congressPeople.filter(c => {
-          const fullName = `${c.first_name} ${c.middle_name} ${c.last_name}`
-          let flag = true
-          if (searchText && searchText.length) {
-            flag = fullName.toLowerCase().indexOf(searchText.toLowerCase()) >= 0
-          }
-          if (flag && gender) {
-            flag = c.gender === gender.toUpperCase()
-          }
-          if (flag && party) {
-            flag = c.party === party.toUpperCase()
-          }
-          if (flag && next_election) {
-            flag = c.next_election === next_election
-          }
-          if (flag && votesPercentage.length) {
-            flag =
-              c.votes_with_party_pct >= votesPercentage[0] &&
-              c.votes_with_party_pct <= votesPercentage[1]
-          }
-          if (flag && totalVotes.length) {
-            flag =
-              c.total_votes >= totalVotes[0] && c.total_votes <= totalVotes[1]
-          }
-          return flag
-        })
-    }
     return (
       <Row gutter={16}>
         <Col span={5}>
@@ -112,7 +66,13 @@ class CongressPeople extends React.Component {
             />
             <div style={{ paddingTop: '20px' }}>
               <CongressPeopleList
-                congressPeople={filterCongressPeople || congressPeople || []}
+                searchText={searchText}
+                gender={gender}
+                party={party}
+                votesPercentage={votesPercentage}
+                totalVotes={totalVotes}
+                next_election={next_election}
+                congressPeople={congressPeople || []}
                 loading={isFetching}
               />
             </div>

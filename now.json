@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "name": "nextjs",
+  "builds": [{ "src": "next.config.js", "use": "@now/next" }],
+  "env": {
+    "GOOGLE_MAPS_KEY_API": "@google-maps-key-api",
+    "X_API_KEY": "@x-api-key"
+  }
+}

@@ -18,15 +18,4 @@ Search.getInitialProps = async ({ reduxStore, query }) => {
   return {}
 }
 
-// Search.getInitialProps = async ({ reduxStore, query }) => {
-//   const { session, chamber, searchText } = query
-//   const { dispatch } = reduxStore
-//   dispatch(changeSession(session))
-//   dispatch(changeChamber(chamber))
-//   dispatch(changeInputSearch(searchText))
-//   await dispatch(fetchCongressPeople())
-
-//   return {}
-// }
-
 export default Search

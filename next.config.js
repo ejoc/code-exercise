@@ -1,4 +1,6 @@
 /* eslint-disable */
+// require('dotenv').config()
+
 const withLess = require('@zeit/next-less')
 const lessToJS = require('less-vars-to-js')
 const fs = require('fs')
@@ -40,10 +42,12 @@ module.exports = withLess({
     modifyVars: themeVariables,
   },
   webpack: config => {
-    config.plugins.push(
+    config.plugins = config.plugins || []
+    config.plugins = [
+      ...config.plugins,
       new FilterPlugin({ filter: /chunk styles \[mini-css-extract-plugin]\nConflicting order between:/ }),
-    );
+    ]
 
-    return config;
+    return config
   },
 })

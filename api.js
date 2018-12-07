@@ -2,11 +2,18 @@ import axios from 'axios'
 
 const API = 'https://api.propublica.org/'
 
-const fetch = axios.create({
-  baseURL: API,
-  timeout: 2000,
-  headers: {'X-API-Key': 'd0ywBucVrXRlMQhENZxRtL3O7NPgtou2mwnLARTr'}
-});
+const X_API_KEY = process.env.X_API_KEY || 'd0ywBucVrXRlMQhENZxRtL3O7NPgtou2mwnLARTr'
+
+let fetch
+if (process.env.NODE_ENV === 'test') {
+  fetch = axios.get
+} else {
+  fetch = axios.create({
+    baseURL: API,
+    // timeout: 2000,
+    headers: { 'X-API-Key': X_API_KEY }
+  });
+}
 
 async function getCongressPeople(session, chamber) {
   const { data } = await fetch(`congress/v1/${session}/${chamber}/members.json`)

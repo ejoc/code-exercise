@@ -13,4 +13,5 @@ CongressPersonPage.getInitialProps = async ({ reduxStore, query }) => {
   await dispatch(fecthCongressPerson(query.id))
   return {}
 }
+
 export default CongressPersonPage

@@ -8,7 +8,7 @@ import {
 } from 'react-google-maps'
 import { compose, withProps, lifecycle } from 'recompose'
 
-const { API_KEY } = process.env
+const GOOGLE_MAPS_KEY_API = process.env.GOOGLE_MAPS_KEY_API || 'xxxxxxxxxx'
 
 const defaultPosition = { lat: 41.85073, lng: -87.65126 }
 
@@ -24,7 +24,7 @@ const OfficeMap = ({ location, isMarkerShown }) => {
 
 export default compose(
   withProps({
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${API_KEY}`,
+    googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_MAPS_KEY_API}`,
     loadingElement: <div style={{ height: '100%' }} />,
     containerElement: <div style={{ height: '400px' }} />,
     mapElement: <div style={{ height: '100%' }} />,
