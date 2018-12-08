@@ -1,5 +1,6 @@
 /* eslint-disable */
 // require('dotenv').config()
+const webpack = require('webpack')
 
 const withLess = require('@zeit/next-less')
 const lessToJS = require('less-vars-to-js')
@@ -46,6 +47,12 @@ module.exports = withLess({
     config.plugins = [
       ...config.plugins,
       new FilterPlugin({ filter: /chunk styles \[mini-css-extract-plugin]\nConflicting order between:/ }),
+      new webpack.DefinePlugin({
+        'process.env': {
+          GOOGLE_MAPS_KEY_API: JSON.stringify(process.env.GOOGLE_MAPS_KEY_API),
+          X_API_KEY: JSON.stringify(process.env.X_API_KEY),
+        },
+      }),
     ]
 
     return config
