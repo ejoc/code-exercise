@@ -8,7 +8,7 @@ import {
 } from 'react-google-maps'
 import { compose, withProps, lifecycle } from 'recompose'
 
-const GOOGLE_MAPS_KEY_API = process.env.GOOGLE_MAPS_KEY_API || 'xxxxxxxxxx'
+const GOOGLE_MAPS_KEY_API = process.env.GOOGLE_MAPS_KEY_API
 
 const defaultPosition = { lat: 41.85073, lng: -87.65126 }
 
