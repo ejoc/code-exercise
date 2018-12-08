@@ -6,7 +6,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "test": "NODE_ENV=test jest --watch"
+    "test": "NODE_ENV=test jest --watch",
+    "heroku-postbuild": "next build"
   },
   "dependencies": {
     "antd": "^3.10.9",
